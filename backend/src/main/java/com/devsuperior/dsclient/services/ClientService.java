@@ -5,6 +5,7 @@ import com.devsuperior.dsclient.entities.Client;
 import com.devsuperior.dsclient.respositories.ClientRepository;
 import com.devsuperior.dsclient.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +58,15 @@ public class ClientService {
             return new ClientDTO(entity);
         }
         catch (EntityNotFoundException e){
+            throw new ResourceNotFoundException("Id not found " + id);
+        }
+    }
+
+    public void delete(Long id) {
+        try{
+            repository.deleteById(id);
+        }
+        catch (EmptyResultDataAccessException e){
             throw new ResourceNotFoundException("Id not found " + id);
         }
     }
